@@ -1,0 +1,118 @@
+---
+title: "Libreria Reticulate"
+author: "acosmilo"
+date: "24/12/2019"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libreria Reticulate
+
+
+
+```{r }
+library(reticulate)
+#use_python("Direccion de python")
+#instala paquetes python
+#py_install("nombre del paquete a instalar")
+
+#os es una libreria de python que es sistema opertivo
+os <- import("os")
+#con $ se accede a las funciones de las libreria os
+os$listdir(".")
+
+```
+
+## Cargar Scripts desde Python
+
+```{r}
+source_python("add.py")
+add(3,4)
+```
+
+## Sin conversion de objetos Python a objetos R
+```{r}
+np <- import("numpy", convert = FALSE)
+
+x <- np$array(c(1:4))
+sum <- x$cumsum()
+
+print(sum)
+#sum es una variable de Python, una lista, en R no hay listas
+
+```
+
+## Conviertiendo de Python a R
+
+```{r}
+py_to_r(sum)
+```
+
+## Ayuda e Python
+```{r}
+#py_help(os$chdir)
+```
+
+## Ayuda e R
+```{r}
+#help(py_to_r)
+```
+
+
+## Arrays de Python en R
+```{r}
+a <- np_array(c(1:10),dtype="float16")
+a
+```
+
+
+## Chunks de Python 
+```{python}
+import math
+math.pi
+```
+
+## Datos de R con Python
+
+```{r}
+datos <- iris
+head(datos)
+
+datos_py <- r_to_py(datos)
+```
+
+```{python}
+
+r.datos_py
+
+
+```
+
+## Sparse Matrix
+```{r}
+library(Matrix)
+N <- 6
+set.seed(123)
+sparse_mat <- sparseMatrix(
+  i = sample(N,N, replace=F),
+  j = sample(N,N, replac=F),
+  x = runif(N),
+  dims = c(N,N)
+)
+sparse_mat
+#sparse_mat_py <- r_to_py(sparse_mat)
+```
+
+```{python}
+#r.sparse_mat_py
+```
+
+```{r}
+#py_to_r(sparse_mat_py)
+```
+
